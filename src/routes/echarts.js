@@ -6,13 +6,15 @@ const router = new KoaRouter();
 
 router.post("/get-echarts-image", (ctx) => {
   const { width = 500, height = 500, option } = ctx.request.body;
-
   const canvas = createCanvas(width, height);
   echarts.setCanvasCreator(() => canvas);
   const chartIns = echarts.init(canvas);
 
+  // echarts 配置部分可能传入的是 json 字符串
+  const _option = typeof option === "string" ? JSON.parse(option) : option;
+
   chartIns.setOption(
-    option || {
+    _option || {
       xAxis: {
         type: "category",
         data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],

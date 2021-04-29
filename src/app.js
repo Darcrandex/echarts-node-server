@@ -1,12 +1,10 @@
-const path = require("path");
 const Koa = require("koa");
-const KoaRouter = require("koa-router");
 const bodyParser = require("koa-bodyparser");
 const cors = require("koa2-cors");
 const IP = require("ip");
-const requireDirectory = require("require-directory");
 
 const { server } = require("./config");
+const echartsRoutes = require("./routes/echarts");
 
 const app = new Koa();
 
@@ -31,15 +29,7 @@ app.use(cors());
 // 处理post请求
 app.use(bodyParser());
 
-// routes 自动加载路由
-const routesDir = path.resolve(__dirname, "./routes");
-requireDirectory(module, routesDir, {
-  visit(item) {
-    if (item instanceof KoaRouter) {
-      app.use(item.routes());
-    }
-  },
-});
+app.use(echartsRoutes.routes(), echartsRoutes.allowedMethods());
 
 app.listen(server.port, () => {
   const local = IP.address();
