@@ -4,7 +4,13 @@ const echarts = require("echarts");
 
 const router = new KoaRouter();
 
+// echarts 生成图片
 router.post("/get-echarts-image", (ctx) => {
+  /**
+   * @param {number?} width 宽
+   * @param {number?} height 高
+   * @param {object?} option echarts(5.x)的配置项
+   */
   const { width = 500, height = 500, option } = ctx.request.body;
   const canvas = createCanvas(width, height);
   echarts.setCanvasCreator(() => canvas);
